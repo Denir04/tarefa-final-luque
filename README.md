@@ -2,7 +2,7 @@
 
 Nome e RA dos integrantes: 
 
-- Denir de Assis Junior 
+- Denir de Assis Junior 1840482012008
 - Lucas Faustini de Melo 1840481922015
 
 Descrição do projeto:
