@@ -38,7 +38,7 @@ public final class Principal extends javax.swing.JFrame {
         formatter = new SimpleDateFormat("dd/MM HH:mm:ss");
         modoVec="Inicio";
         rb_carro.setSelected(true);
-        manipularInterface();
+        manipularInterfaceVec();
     }
    
     @SuppressWarnings("unchecked")
@@ -445,7 +445,7 @@ public final class Principal extends javax.swing.JFrame {
 
     private void btn_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelarActionPerformed
         modoVec="Inicio";
-        manipularInterface();
+        manipularInterfaceVec();
     }//GEN-LAST:event_btn_cancelarActionPerformed
 
     private void btn_salvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salvarActionPerformed
@@ -467,7 +467,7 @@ public final class Principal extends javax.swing.JFrame {
         }
         LoadTableVec();
         modoVec="Inicio";
-        manipularInterface();
+        manipularInterfaceVec();
     }//GEN-LAST:event_btn_salvarActionPerformed
 
     private void c_txt_modeloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_txt_modeloActionPerformed
@@ -485,17 +485,17 @@ public final class Principal extends javax.swing.JFrame {
         }
         LoadTableVec();
         modoVec="Inicio";
-        manipularInterface();
+        manipularInterfaceVec();
     }//GEN-LAST:event_btn_liberarActionPerformed
 
     private void btn_adicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_adicionarActionPerformed
         modoVec="Adicionar";
-        manipularInterface();
+        manipularInterfaceVec();
     }//GEN-LAST:event_btn_adicionarActionPerformed
 
     private void btn_alterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_alterarActionPerformed
         modoVec="Alterar";
-        manipularInterface();
+        manipularInterfaceVec();
     }//GEN-LAST:event_btn_alterarActionPerformed
 
     private void tbl_veiculosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_veiculosMouseClicked
@@ -507,7 +507,7 @@ public final class Principal extends javax.swing.JFrame {
             if("Carro".equals(V.getCategoria())) rb_carro.setSelected(true);
             else if("Moto".equals(V.getCategoria())) rb_moto.setSelected(true);
             modoVec="Selecao";
-            manipularInterface();
+            manipularInterfaceVec();
         }
     }//GEN-LAST:event_tbl_veiculosMouseClicked
 
@@ -519,7 +519,7 @@ public final class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_vagas_cancelarActionPerformed
     
-    public void manipularInterface(){
+    public void manipularInterfaceVec(){
         switch(modoVec){
             case "Inicio"->{
                 btn_salvar.setEnabled(false);
