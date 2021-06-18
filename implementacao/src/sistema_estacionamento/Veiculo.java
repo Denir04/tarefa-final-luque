@@ -1,17 +1,20 @@
 package sistema_estacionamento;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Veiculo {
     String modelo;
     String placa;
     String categoria;
-    String horario;
+    Date horario;
+    SimpleDateFormat formatter;
     
-    public Veiculo(String modelo, String placa,String categoria, String horario) {
+    public Veiculo(String modelo, String placa,String categoria, Date horario) {
         this.modelo = modelo;
         this.placa = placa;
         this.categoria = categoria;
         this.horario= horario;
+        formatter = new SimpleDateFormat("dd/MM HH:mm:ss");
     }
 
     public String getModelo() {
@@ -39,12 +42,7 @@ public class Veiculo {
     }
 
     public String getHorario() {
-        return horario;
+        return formatter.format(horario);
     }
-
-    public void setHorario(String horario) {
-        this.horario = horario;
-    }
-    
     
 }

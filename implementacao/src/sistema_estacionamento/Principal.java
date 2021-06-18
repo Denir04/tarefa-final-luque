@@ -7,11 +7,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 public final class Principal extends javax.swing.JFrame {
     ArrayList<Veiculo> ListaVec;
-    String modoVec,modoVag;
+    ArrayList<Vaga> ListaVagas;
+    ArrayList ListaRegistro;
+    String modoVec,modoVagas;
     SimpleDateFormat formatter;
     
     public void LoadTableVec(){
-        DefaultTableModel modelo = new DefaultTableModel(new Object[]{"Modelo","Placa","Categoria","Horario"},0){
+        DefaultTableModel modelo_vec = new DefaultTableModel(new Object[]{"Modelo","Placa","Categoria","Data / Horario"},0){
             @Override
             public boolean isCellEditable(int row, int column){
                 //all cells false
@@ -23,22 +25,46 @@ public final class Principal extends javax.swing.JFrame {
                                           ListaVec.get(i).getPlaca(),
                                           ListaVec.get(i).getCategoria(),
                                           ListaVec.get(i).getHorario()};
-            modelo.addRow(linha);
+            modelo_vec.addRow(linha);
         }
-        tbl_veiculos.setModel(modelo);
+        tbl_veiculos.setModel(modelo_vec);
         tbl_veiculos.getColumnModel().getColumn(0).setPreferredWidth(100);
         tbl_veiculos.getColumnModel().getColumn(1).setPreferredWidth(50);
         tbl_veiculos.getColumnModel().getColumn(2).setPreferredWidth(100);
         tbl_veiculos.getColumnModel().getColumn(3).setPreferredWidth(100);
     }
+    public void LoadTableVagas(){
+        DefaultTableModel modelo_vagas = new DefaultTableModel(new Object[]{"ID","Categoria","Situação","Placa"},0){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                //all cells false
+                return false;
+            }
+        };
+        String placa="";
+        for(int i=0;i<ListaVagas.size();i++){
+            if(ListaVagas.get(i).getSituacao().equals("Ocupada")) placa=ListaVagas.get(i).getPlaca();
+            else if(ListaVagas.get(i).getSituacao().equals("Disponivel")) placa= " - ";
+            Object linha[] = new Object[]{ListaVagas.get(i).getId(),
+                                          ListaVagas.get(i).getCategoria(),
+                                          ListaVagas.get(i).getSituacao(),
+                                          placa};
+            modelo_vagas.addRow(linha);
+        }
+        tbl_vagas.setModel(modelo_vagas);
+        tbl_vagas.getColumnModel().getColumn(0).setPreferredWidth(100);
+    }
     public Principal() {
         initComponents();
         setLocationRelativeTo(null);
         ListaVec = new ArrayList();
-        formatter = new SimpleDateFormat("dd/MM HH:mm:ss");
+        ListaVagas = new ArrayList();
         modoVec="Inicio";
-        rb_carro.setSelected(true);
+        modoVagas="Inicio";
+        rb_vec_carro.setSelected(true);
+        rb_vagas_carro.setSelected(true);
         manipularInterfaceVec();
+        manipularInterfaceVagas();
     }
    
     @SuppressWarnings("unchecked")
@@ -51,18 +77,18 @@ public final class Principal extends javax.swing.JFrame {
         panel_estacionamento = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbl_veiculos = new javax.swing.JTable();
-        btn_alterar = new javax.swing.JButton();
-        btn_adicionar = new javax.swing.JButton();
-        btn_liberar = new javax.swing.JButton();
+        btn_vec_alterar = new javax.swing.JButton();
+        btn_vec_adicionar = new javax.swing.JButton();
+        btn_vec_liberar = new javax.swing.JButton();
         panel_dados_vec = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         c_txt_placa = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         c_txt_modelo = new javax.swing.JTextField();
-        btn_salvar = new javax.swing.JButton();
-        btn_cancelar = new javax.swing.JButton();
-        rb_carro = new javax.swing.JRadioButton();
-        rb_moto = new javax.swing.JRadioButton();
+        btn_vec_salvar = new javax.swing.JButton();
+        btn_vec_cancelar = new javax.swing.JButton();
+        rb_vec_carro = new javax.swing.JRadioButton();
+        rb_vec_moto = new javax.swing.JRadioButton();
         panel_vagas = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tbl_vagas = new javax.swing.JTable();
@@ -82,7 +108,7 @@ public final class Principal extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Modelo", "Placa", "Categoria", "Horario"
+                "Modelo", "Placa", "Categoria", "Data / Horario"
             }
         ) {
             Class[] types = new Class [] {
@@ -111,33 +137,30 @@ public final class Principal extends javax.swing.JFrame {
             tbl_veiculos.getColumnModel().getColumn(0).setPreferredWidth(100);
             tbl_veiculos.getColumnModel().getColumn(1).setResizable(false);
             tbl_veiculos.getColumnModel().getColumn(1).setPreferredWidth(50);
-            tbl_veiculos.getColumnModel().getColumn(1).setHeaderValue("Placa");
             tbl_veiculos.getColumnModel().getColumn(2).setResizable(false);
             tbl_veiculos.getColumnModel().getColumn(2).setPreferredWidth(100);
-            tbl_veiculos.getColumnModel().getColumn(2).setHeaderValue("Categoria");
             tbl_veiculos.getColumnModel().getColumn(3).setResizable(false);
             tbl_veiculos.getColumnModel().getColumn(3).setPreferredWidth(100);
-            tbl_veiculos.getColumnModel().getColumn(3).setHeaderValue("Horario");
         }
 
-        btn_alterar.setText("Alterar");
-        btn_alterar.addActionListener(new java.awt.event.ActionListener() {
+        btn_vec_alterar.setText("Alterar");
+        btn_vec_alterar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_alterarActionPerformed(evt);
+                btn_vec_alterarActionPerformed(evt);
             }
         });
 
-        btn_adicionar.setText("Adicionar");
-        btn_adicionar.addActionListener(new java.awt.event.ActionListener() {
+        btn_vec_adicionar.setText("Adicionar");
+        btn_vec_adicionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_adicionarActionPerformed(evt);
+                btn_vec_adicionarActionPerformed(evt);
             }
         });
 
-        btn_liberar.setText("Liberar");
-        btn_liberar.addActionListener(new java.awt.event.ActionListener() {
+        btn_vec_liberar.setText("Liberar");
+        btn_vec_liberar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_liberarActionPerformed(evt);
+                btn_vec_liberarActionPerformed(evt);
             }
         });
 
@@ -159,25 +182,25 @@ public final class Principal extends javax.swing.JFrame {
             }
         });
 
-        btn_salvar.setText("Salvar");
-        btn_salvar.addActionListener(new java.awt.event.ActionListener() {
+        btn_vec_salvar.setText("Salvar");
+        btn_vec_salvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_salvarActionPerformed(evt);
+                btn_vec_salvarActionPerformed(evt);
             }
         });
 
-        btn_cancelar.setText("Cancelar");
-        btn_cancelar.addActionListener(new java.awt.event.ActionListener() {
+        btn_vec_cancelar.setText("Cancelar");
+        btn_vec_cancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_cancelarActionPerformed(evt);
+                btn_vec_cancelarActionPerformed(evt);
             }
         });
 
-        rbgroup_veiculos.add(rb_carro);
-        rb_carro.setText("Carro");
+        rbgroup_veiculos.add(rb_vec_carro);
+        rb_vec_carro.setText("Carro");
 
-        rbgroup_veiculos.add(rb_moto);
-        rb_moto.setText("Moto");
+        rbgroup_veiculos.add(rb_vec_moto);
+        rb_vec_moto.setText("Moto");
 
         javax.swing.GroupLayout panel_dados_vecLayout = new javax.swing.GroupLayout(panel_dados_vec);
         panel_dados_vec.setLayout(panel_dados_vecLayout);
@@ -195,14 +218,14 @@ public final class Principal extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(c_txt_placa, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(rb_carro)
+                        .addComponent(rb_vec_carro)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(rb_moto))
+                        .addComponent(rb_vec_moto))
                     .addGroup(panel_dados_vecLayout.createSequentialGroup()
                         .addGap(93, 93, 93)
-                        .addComponent(btn_salvar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_vec_salvar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btn_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_vec_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -215,12 +238,12 @@ public final class Principal extends javax.swing.JFrame {
                     .addComponent(c_txt_modelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(c_txt_placa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(rb_carro)
-                    .addComponent(rb_moto))
+                    .addComponent(rb_vec_carro)
+                    .addComponent(rb_vec_moto))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addGroup(panel_dados_vecLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_cancelar)
-                    .addComponent(btn_salvar))
+                    .addComponent(btn_vec_cancelar)
+                    .addComponent(btn_vec_salvar))
                 .addContainerGap())
         );
 
@@ -236,11 +259,11 @@ public final class Principal extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_estacionamentoLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btn_adicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_vec_adicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btn_alterar, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_vec_alterar, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btn_liberar, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_vec_liberar, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(43, 43, 43))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_estacionamentoLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -254,9 +277,9 @@ public final class Principal extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(panel_estacionamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_adicionar)
-                    .addComponent(btn_alterar)
-                    .addComponent(btn_liberar))
+                    .addComponent(btn_vec_adicionar)
+                    .addComponent(btn_vec_alterar)
+                    .addComponent(btn_vec_liberar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(panel_dados_vec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -428,47 +451,78 @@ public final class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_vagas_excluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_vagas_excluirActionPerformed
-        // TODO add your handling code here:
+        int index = tbl_vagas.getSelectedRow();
+        if(ListaVagas.get(index).getSituacao().equals("Ocupada")){
+            JOptionPane.showMessageDialog(null,"Libere o carro alocado a esta vaga antes de exlui-la");
+        }else{
+            if(index>=0 && index<ListaVagas.size()) ListaVagas.remove(index);
+            LoadTableVagas();
+            modoVagas="Inicio";
+            manipularInterfaceVagas();
+        }
     }//GEN-LAST:event_btn_vagas_excluirActionPerformed
 
     private void btn_vagas_alterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_vagas_alterarActionPerformed
-        // TODO add your handling code here:
+        int index = tbl_vagas.getSelectedRow();
+        if(ListaVagas.get(index).getSituacao().equals("Ocupada")){
+            JOptionPane.showMessageDialog(null,"Libere o carro alocado a esta vaga antes de altera-la");
+        }else{
+            modoVagas="Alterar";
+            manipularInterfaceVagas();
+        }
     }//GEN-LAST:event_btn_vagas_alterarActionPerformed
 
     private void btn_vagas_adicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_vagas_adicionarActionPerformed
-        // TODO add your handling code here:
+        modoVagas="Adicionar";
+        manipularInterfaceVagas();
     }//GEN-LAST:event_btn_vagas_adicionarActionPerformed
 
     private void tbl_vagasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_vagasMouseClicked
-        // TODO add your handling code here:
+        int index = tbl_vagas.getSelectedRow();
+        if(index>=0 && index<ListaVagas.size()){
+            Vaga vg = ListaVagas.get(index);
+            if("Carro".equals(vg.getCategoria())) rb_vagas_carro.setSelected(true);
+            else if("Moto".equals(vg.getCategoria())) rb_vagas_moto.setSelected(true);
+            modoVagas="Selecao";
+            manipularInterfaceVagas();
+        }
     }//GEN-LAST:event_tbl_vagasMouseClicked
 
-    private void btn_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelarActionPerformed
+    private void btn_vec_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_vec_cancelarActionPerformed
         modoVec="Inicio";
         manipularInterfaceVec();
-    }//GEN-LAST:event_btn_cancelarActionPerformed
+    }//GEN-LAST:event_btn_vec_cancelarActionPerformed
 
-    private void btn_salvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salvarActionPerformed
+    private void btn_vec_salvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_vec_salvarActionPerformed
         if(modoVec.equals("Adicionar")){
-            Date date = new Date();
             String categoria = "";
-            if(rb_carro.isSelected()) categoria = "Carro";
-            else if(rb_moto.isSelected()) categoria = "Moto";
-            Veiculo ve = new Veiculo(c_txt_modelo.getText(),c_txt_placa.getText(),categoria,formatter.format(date));
-            ListaVec.add(ve);
+            if(rb_vec_carro.isSelected()) categoria = "Carro";
+            else if(rb_vec_moto.isSelected()) categoria = "Moto";
+            Veiculo ve = new Veiculo(c_txt_modelo.getText(),c_txt_placa.getText(),categoria,new Date());
+            int i;
+            for(i=0;i<ListaVagas.size();i++){
+                if(ListaVagas.get(i).getSituacao().equals("Disponivel") && 
+                   ListaVagas.get(i).getCategoria().equals(categoria)){
+                    ListaVagas.get(i).setVec(ve);
+                    break;
+                }
+            }
+            if(i==ListaVagas.size()) JOptionPane.showMessageDialog(null,"Não há vaga para essa categoria de veículo");
+            else ListaVec.add(ve);
         }else if(modoVec.equals("Alterar")){
             int index = tbl_veiculos.getSelectedRow();
             ListaVec.get(index).setModelo(c_txt_modelo.getText());
             ListaVec.get(index).setPlaca(c_txt_placa.getText());
             String categoria="";
-            if(rb_carro.isSelected()) categoria="Carro";
-            else if(rb_moto.isSelected()) categoria="Moto";
+            if(rb_vec_carro.isSelected()) categoria="Carro";
+            else if(rb_vec_moto.isSelected()) categoria="Moto";
             ListaVec.get(index).setCategoria(categoria);
         }
         LoadTableVec();
+        LoadTableVagas();
         modoVec="Inicio";
         manipularInterfaceVec();
-    }//GEN-LAST:event_btn_salvarActionPerformed
+    }//GEN-LAST:event_btn_vec_salvarActionPerformed
 
     private void c_txt_modeloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_txt_modeloActionPerformed
 
@@ -478,25 +532,42 @@ public final class Principal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_c_txt_placaActionPerformed
 
-    private void btn_liberarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_liberarActionPerformed
+    private void btn_vec_liberarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_vec_liberarActionPerformed
         int index = tbl_veiculos.getSelectedRow();
+        for(int i=0;i<ListaVagas.size();i++){
+           if(ListaVagas.get(i).getPlaca().equals(ListaVec.get(index).getPlaca())){
+               ListaVagas.get(i).setSituacao("Disponivel");
+               break;
+           }
+        }
         if(index>=0 && index<ListaVec.size()){
             ListaVec.remove(index);
         }
         LoadTableVec();
+        LoadTableVagas();
         modoVec="Inicio";
         manipularInterfaceVec();
-    }//GEN-LAST:event_btn_liberarActionPerformed
+    }//GEN-LAST:event_btn_vec_liberarActionPerformed
 
-    private void btn_adicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_adicionarActionPerformed
-        modoVec="Adicionar";
-        manipularInterfaceVec();
-    }//GEN-LAST:event_btn_adicionarActionPerformed
+    private void btn_vec_adicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_vec_adicionarActionPerformed
+        if(ListaVagas.isEmpty()) JOptionPane.showMessageDialog(null,"Não há nenhuma vaga para poder alocar um veiculo!");
+        else{
+            int i;
+            for(i=0;i<ListaVagas.size();i++){ 
+                if(ListaVagas.get(i).getSituacao().equals("Disponivel")) break;
+            }
+            if(i==ListaVagas.size()) JOptionPane.showMessageDialog(null,"Todas as vagas estão ocupadas");
+            else{
+                modoVec="Adicionar";
+                manipularInterfaceVec();
+            }
+        }
+    }//GEN-LAST:event_btn_vec_adicionarActionPerformed
 
-    private void btn_alterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_alterarActionPerformed
+    private void btn_vec_alterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_vec_alterarActionPerformed
         modoVec="Alterar";
         manipularInterfaceVec();
-    }//GEN-LAST:event_btn_alterarActionPerformed
+    }//GEN-LAST:event_btn_vec_alterarActionPerformed
 
     private void tbl_veiculosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_veiculosMouseClicked
         int index = tbl_veiculos.getSelectedRow();
@@ -504,70 +575,90 @@ public final class Principal extends javax.swing.JFrame {
             Veiculo V = ListaVec.get(index);
             c_txt_modelo.setText(V.getModelo());
             c_txt_placa.setText(V.getPlaca());
-            if("Carro".equals(V.getCategoria())) rb_carro.setSelected(true);
-            else if("Moto".equals(V.getCategoria())) rb_moto.setSelected(true);
+            if("Carro".equals(V.getCategoria())) rb_vec_carro.setSelected(true);
+            else if("Moto".equals(V.getCategoria())) rb_vec_moto.setSelected(true);
             modoVec="Selecao";
             manipularInterfaceVec();
         }
     }//GEN-LAST:event_tbl_veiculosMouseClicked
 
     private void btn_vagas_salvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_vagas_salvarActionPerformed
-        // TODO add your handling code here:
+        if(modoVagas.equals("Adicionar")){
+            String categoria = "";
+            if(rb_vagas_carro.isSelected()) categoria = "Carro";
+            else if(rb_vagas_moto.isSelected()) categoria = "Moto";
+            int id; 
+            for(id=0;id<(ListaVagas.size());id++);
+            if(id!=0) id = ListaVagas.get(id-1).getId();
+            Vaga vg = new Vaga(id+1,categoria);
+            ListaVagas.add(vg);
+            LoadTableVagas();
+        }else if(modoVagas.equals("Alterar")){
+            int index = tbl_vagas.getSelectedRow();
+            String categoria="";
+            if(rb_vagas_carro.isSelected()) categoria="Carro";
+            else if(rb_vagas_moto.isSelected()) categoria="Moto";
+            ListaVagas.get(index).setCategoria(categoria);
+        }
+        LoadTableVagas();
+        modoVagas="Inicio";
+        manipularInterfaceVagas();
     }//GEN-LAST:event_btn_vagas_salvarActionPerformed
 
     private void btn_vagas_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_vagas_cancelarActionPerformed
-        // TODO add your handling code here:
+        modoVagas="Inicio";
+        manipularInterfaceVagas();
     }//GEN-LAST:event_btn_vagas_cancelarActionPerformed
     
     public void manipularInterfaceVec(){
         switch(modoVec){
             case "Inicio"->{
-                btn_salvar.setEnabled(false);
-                btn_cancelar.setEnabled(false);
-                btn_adicionar.setEnabled(true);
-                btn_alterar.setEnabled(false);
-                btn_liberar.setEnabled(false);
+                btn_vec_salvar.setEnabled(false);
+                btn_vec_cancelar.setEnabled(false);
+                btn_vec_adicionar.setEnabled(true);
+                btn_vec_alterar.setEnabled(false);
+                btn_vec_liberar.setEnabled(false);
                 c_txt_modelo.setEnabled(false);
                 c_txt_placa.setEnabled(false);
                 c_txt_modelo.setText("");
                 c_txt_placa.setText("");
-                rb_carro.setEnabled(false);
-                rb_moto.setEnabled(false);
+                rb_vec_carro.setEnabled(false);
+                rb_vec_moto.setEnabled(false);
             }
             case "Adicionar"->{
-                btn_salvar.setEnabled(true);
-                btn_cancelar.setEnabled(true);
-                btn_adicionar.setEnabled(false);
-                btn_alterar.setEnabled(false);
-                btn_liberar.setEnabled(false);
+                btn_vec_salvar.setEnabled(true);
+                btn_vec_cancelar.setEnabled(true);
+                btn_vec_adicionar.setEnabled(false);
+                btn_vec_alterar.setEnabled(false);
+                btn_vec_liberar.setEnabled(false);
                 c_txt_modelo.setEnabled(true);
                 c_txt_placa.setEnabled(true);
                 c_txt_modelo.setText("");
                 c_txt_placa.setText("");
-                rb_carro.setEnabled(true);
-                rb_moto.setEnabled(true);
+                rb_vec_carro.setEnabled(true);
+                rb_vec_moto.setEnabled(true);
             }
             case "Alterar"->{
-                btn_salvar.setEnabled(true);
-                btn_cancelar.setEnabled(true);
-                btn_adicionar.setEnabled(true);
-                btn_alterar.setEnabled(false);
-                btn_liberar.setEnabled(false);
+                btn_vec_salvar.setEnabled(true);
+                btn_vec_cancelar.setEnabled(true);
+                btn_vec_adicionar.setEnabled(true);
+                btn_vec_alterar.setEnabled(false);
+                btn_vec_liberar.setEnabled(false);
                 c_txt_modelo.setEnabled(true);
                 c_txt_placa.setEnabled(true);
-                rb_carro.setEnabled(true);
-                rb_moto.setEnabled(true);
+                rb_vec_carro.setEnabled(true);
+                rb_vec_moto.setEnabled(true);
             }
             case "Selecao"->{
-                btn_salvar.setEnabled(false);
-                btn_cancelar.setEnabled(false);
-                btn_adicionar.setEnabled(true);
-                btn_alterar.setEnabled(true);
-                btn_liberar.setEnabled(true);
+                btn_vec_salvar.setEnabled(false);
+                btn_vec_cancelar.setEnabled(false);
+                btn_vec_adicionar.setEnabled(true);
+                btn_vec_alterar.setEnabled(true);
+                btn_vec_liberar.setEnabled(true);
                 c_txt_modelo.setEnabled(false);
                 c_txt_placa.setEnabled(false);
-                rb_carro.setEnabled(false);
-                rb_moto.setEnabled(false);
+                rb_vec_carro.setEnabled(false);
+                rb_vec_moto.setEnabled(false);
             }
             default->{
                 JOptionPane.showMessageDialog(null, "modo invalido");
@@ -575,7 +666,7 @@ public final class Principal extends javax.swing.JFrame {
         }
     }
     public void manipularInterfaceVagas(){
-        switch(modoVag){
+        switch(modoVagas){
             case "Inicio"->{
                 btn_vagas_salvar.setEnabled(false);
                 btn_vagas_cancelar.setEnabled(false);
@@ -586,39 +677,31 @@ public final class Principal extends javax.swing.JFrame {
                 rb_vagas_moto.setEnabled(false);
             }
             case "Adicionar"->{
-                btn_salvar.setEnabled(true);
-                btn_cancelar.setEnabled(true);
-                btn_adicionar.setEnabled(false);
-                btn_alterar.setEnabled(false);
-                btn_liberar.setEnabled(false);
-                c_txt_modelo.setEnabled(true);
-                c_txt_placa.setEnabled(true);
-                c_txt_modelo.setText("");
-                c_txt_placa.setText("");
-                rb_carro.setEnabled(true);
-                rb_moto.setEnabled(true);
+                btn_vagas_salvar.setEnabled(true);
+                btn_vagas_cancelar.setEnabled(true);
+                btn_vagas_adicionar.setEnabled(false);
+                btn_vagas_alterar.setEnabled(false);
+                btn_vagas_excluir.setEnabled(false);
+                rb_vagas_carro.setEnabled(true);
+                rb_vagas_moto.setEnabled(true);
             }
             case "Alterar"->{
-                btn_salvar.setEnabled(true);
-                btn_cancelar.setEnabled(true);
-                btn_adicionar.setEnabled(true);
-                btn_alterar.setEnabled(false);
-                btn_liberar.setEnabled(false);
-                c_txt_modelo.setEnabled(true);
-                c_txt_placa.setEnabled(true);
-                rb_carro.setEnabled(true);
-                rb_moto.setEnabled(true);
+                btn_vagas_salvar.setEnabled(true);
+                btn_vagas_cancelar.setEnabled(true);
+                btn_vagas_adicionar.setEnabled(true);
+                btn_vagas_alterar.setEnabled(false);
+                btn_vagas_excluir.setEnabled(false);
+                rb_vagas_carro.setEnabled(true);
+                rb_vagas_moto.setEnabled(true);
             }
             case "Selecao"->{
-                btn_salvar.setEnabled(false);
-                btn_cancelar.setEnabled(false);
-                btn_adicionar.setEnabled(true);
-                btn_alterar.setEnabled(true);
-                btn_liberar.setEnabled(true);
-                c_txt_modelo.setEnabled(false);
-                c_txt_placa.setEnabled(false);
-                rb_carro.setEnabled(false);
-                rb_moto.setEnabled(false);
+                btn_vagas_salvar.setEnabled(false);
+                btn_vagas_cancelar.setEnabled(false);
+                btn_vagas_adicionar.setEnabled(true);
+                btn_vagas_alterar.setEnabled(true);
+                btn_vagas_excluir.setEnabled(true);
+                rb_vagas_carro.setEnabled(false);
+                rb_vagas_moto.setEnabled(false);
             }
             default->{
                 JOptionPane.showMessageDialog(null, "modo invalido");
@@ -663,16 +746,16 @@ public final class Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane Abas_estacionamento;
-    private javax.swing.JButton btn_adicionar;
-    private javax.swing.JButton btn_alterar;
-    private javax.swing.JButton btn_cancelar;
-    private javax.swing.JButton btn_liberar;
-    private javax.swing.JButton btn_salvar;
     private javax.swing.JButton btn_vagas_adicionar;
     private javax.swing.JButton btn_vagas_alterar;
     private javax.swing.JButton btn_vagas_cancelar;
     private javax.swing.JButton btn_vagas_excluir;
     private javax.swing.JButton btn_vagas_salvar;
+    private javax.swing.JButton btn_vec_adicionar;
+    private javax.swing.JButton btn_vec_alterar;
+    private javax.swing.JButton btn_vec_cancelar;
+    private javax.swing.JButton btn_vec_liberar;
+    private javax.swing.JButton btn_vec_salvar;
     private javax.swing.JTextField c_txt_modelo;
     private javax.swing.JTextField c_txt_placa;
     private javax.swing.JLabel jLabel1;
@@ -683,10 +766,10 @@ public final class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel panel_dados_vec;
     private javax.swing.JPanel panel_estacionamento;
     private javax.swing.JPanel panel_vagas;
-    private javax.swing.JRadioButton rb_carro;
-    private javax.swing.JRadioButton rb_moto;
     private javax.swing.JRadioButton rb_vagas_carro;
     private javax.swing.JRadioButton rb_vagas_moto;
+    private javax.swing.JRadioButton rb_vec_carro;
+    private javax.swing.JRadioButton rb_vec_moto;
     private javax.swing.ButtonGroup rbgroup_vagas;
     private javax.swing.ButtonGroup rbgroup_veiculos;
     private javax.swing.JTable tbl_vagas;
