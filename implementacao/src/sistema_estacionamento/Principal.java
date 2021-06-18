@@ -126,6 +126,7 @@ public final class Principal extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tbl_registros = new javax.swing.JTable();
+        btn_relatorios_emitir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -477,6 +478,13 @@ public final class Principal extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(tbl_registros);
 
+        btn_relatorios_emitir.setText("Emitir Relatório");
+        btn_relatorios_emitir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_relatorios_emitirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -484,13 +492,19 @@ public final class Principal extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btn_relatorios_emitir)
+                .addGap(27, 27, 27))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btn_relatorios_emitir)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         Abas_estacionamento.addTab("Relatório", jPanel1);
@@ -685,6 +699,10 @@ public final class Principal extends javax.swing.JFrame {
         modoVagas="Inicio";
         manipularInterfaceVagas();
     }//GEN-LAST:event_btn_vagas_cancelarActionPerformed
+
+    private void btn_relatorios_emitirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_relatorios_emitirActionPerformed
+        JOptionPane.showMessageDialog(null,"Botão ainda sem função");
+    }//GEN-LAST:event_btn_relatorios_emitirActionPerformed
     
     public void manipularInterfaceVec(){
         switch(modoVec){
@@ -822,6 +840,7 @@ public final class Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane Abas_estacionamento;
+    private javax.swing.JButton btn_relatorios_emitir;
     private javax.swing.JButton btn_vagas_adicionar;
     private javax.swing.JButton btn_vagas_alterar;
     private javax.swing.JButton btn_vagas_cancelar;
