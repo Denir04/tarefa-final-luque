@@ -1,14 +1,16 @@
 package sistema_estacionamento;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;  
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 public final class Principal extends javax.swing.JFrame {
     ArrayList<Veiculo> ListaVec;
     ArrayList<Vaga> ListaVagas;
-    ArrayList ListaRegistro;
+    ArrayList<Registro> ListaRegistro;
     String modoVec,modoVagas;
     SimpleDateFormat formatter;
     
@@ -54,11 +56,29 @@ public final class Principal extends javax.swing.JFrame {
         tbl_vagas.setModel(modelo_vagas);
         tbl_vagas.getColumnModel().getColumn(0).setPreferredWidth(100);
     }
+    public void LoadTableReg(){
+        DefaultTableModel modelo_reg = new DefaultTableModel(new Object[]{"Preco","Data / Horario"},0){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                //all cells false
+                return false;
+            }
+        };
+        for(int i=0;i<ListaVagas.size();i++){
+            Object linha[] = new Object[]{ListaRegistro.get(i).getPreco(),
+                                          ListaRegistro.get(i).getStringHorario(),
+                                          };
+            modelo_reg.addRow(linha);
+        }
+        tbl_registros.setModel(modelo_reg);
+    }
+    
     public Principal() {
         initComponents();
         setLocationRelativeTo(null);
         ListaVec = new ArrayList();
         ListaVagas = new ArrayList();
+        ListaRegistro = new ArrayList();
         modoVec="Inicio";
         modoVagas="Inicio";
         rb_vec_carro.setSelected(true);
@@ -100,6 +120,9 @@ public final class Principal extends javax.swing.JFrame {
         btn_vagas_cancelar = new javax.swing.JButton();
         rb_vagas_carro = new javax.swing.JRadioButton();
         rb_vagas_moto = new javax.swing.JRadioButton();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tbl_registros = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -428,10 +451,46 @@ public final class Principal extends javax.swing.JFrame {
                     .addComponent(btn_vagas_excluir))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(panel_dado_vaga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         Abas_estacionamento.addTab("Configuração de Vagas", panel_vagas);
+
+        tbl_registros.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Valor", "Data / Hora"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Float.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(tbl_registros);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(28, Short.MAX_VALUE))
+        );
+
+        Abas_estacionamento.addTab("Relatório", jPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -540,15 +599,30 @@ public final class Principal extends javax.swing.JFrame {
                break;
            }
         }
+        float preco = calcularValor(index);
+        DecimalFormat formato = new DecimalFormat("#.##"); 
+        JOptionPane.showMessageDialog(null,"O dono deste veiculo pargará: R$"+formato.format(preco));
+        Date dt = new Date();
+        Registro rg = new Registro(preco,dt);
+        ListaRegistro.add(rg);
         if(index>=0 && index<ListaVec.size()){
             ListaVec.remove(index);
         }
         LoadTableVec();
         LoadTableVagas();
+        LoadTableReg();
         modoVec="Inicio";
         manipularInterfaceVec();
     }//GEN-LAST:event_btn_vec_liberarActionPerformed
-
+    public float calcularValor(int i){
+        Date dt = new Date();
+        long diffMilSegs = dt.getTime()-ListaVec.get(i).getDHorario().getTime();
+        long diff = TimeUnit.SECONDS.convert(diffMilSegs, TimeUnit.MILLISECONDS);
+        JOptionPane.showMessageDialog(null,"O veiculo ficou no estacionamento por "+diff+" segundo(s)");
+        float resultado = diff;
+        return resultado*0.01f;
+    }
+    
     private void btn_vec_adicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_vec_adicionarActionPerformed
         if(ListaVagas.isEmpty()) JOptionPane.showMessageDialog(null,"Não há nenhuma vaga para poder alocar um veiculo!");
         else{
@@ -760,8 +834,10 @@ public final class Principal extends javax.swing.JFrame {
     private javax.swing.JTextField c_txt_placa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JPanel panel_dado_vaga;
     private javax.swing.JPanel panel_dados_vec;
     private javax.swing.JPanel panel_estacionamento;
@@ -772,6 +848,7 @@ public final class Principal extends javax.swing.JFrame {
     private javax.swing.JRadioButton rb_vec_moto;
     private javax.swing.ButtonGroup rbgroup_vagas;
     private javax.swing.ButtonGroup rbgroup_veiculos;
+    private javax.swing.JTable tbl_registros;
     private javax.swing.JTable tbl_vagas;
     private javax.swing.JTable tbl_veiculos;
     // End of variables declaration//GEN-END:variables

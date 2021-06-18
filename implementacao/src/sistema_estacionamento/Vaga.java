@@ -2,10 +2,10 @@ package sistema_estacionamento;
 
 
 public class Vaga {
-    public int id;
-    public String categoria;
-    public String situacao;
-    public Veiculo vec;
+    private int id;
+    private String categoria;
+    private String situacao;
+    private Veiculo vec;
 
     public Vaga(int id, String categoria) {
         this.id = id;

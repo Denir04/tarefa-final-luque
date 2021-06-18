@@ -3,11 +3,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Veiculo {
-    String modelo;
-    String placa;
-    String categoria;
-    Date horario;
-    SimpleDateFormat formatter;
+    private String modelo;
+    private String placa;
+    private String categoria;
+    private Date horario;
+    private SimpleDateFormat formatter;
     
     public Veiculo(String modelo, String placa,String categoria, Date horario) {
         this.modelo = modelo;
@@ -43,6 +43,9 @@ public class Veiculo {
 
     public String getHorario() {
         return formatter.format(horario);
+    }
+    public Date getDHorario(){
+        return horario;
     }
     
 }
