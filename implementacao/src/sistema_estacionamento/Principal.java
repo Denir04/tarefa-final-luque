@@ -57,7 +57,8 @@ public final class Principal extends javax.swing.JFrame {
         tbl_vagas.setModel(modelo_vagas);
         tbl_vagas.getColumnModel().getColumn(0).setPreferredWidth(100);
     }
-    public void LoadTableReg(){
+    public void LoadTableReg()
+    {
         DefaultTableModel modelo_reg = new DefaultTableModel(new Object[]{"Preco","Data / Horario"},0){
             @Override
             public boolean isCellEditable(int row, int column){
@@ -602,7 +603,7 @@ public final class Principal extends javax.swing.JFrame {
            }
         }
         float preco = calcularValor(index); 
-        JOptionPane.showMessageDialog(null,"O dono deste veiculo pargará: R$"+formato.format(preco));
+        JOptionPane.showMessageDialog(null,"O dono deste veiculo pagará: R$"+formato.format(preco));
         Date dt = new Date();
         Registro rg = new Registro(preco,dt);
         ListaRegistro.add(rg);
