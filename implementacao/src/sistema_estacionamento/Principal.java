@@ -13,6 +13,7 @@ public final class Principal extends javax.swing.JFrame {
     ArrayList<Registro> ListaRegistro;
     String modoVec,modoVagas;
     SimpleDateFormat formatter;
+    DecimalFormat formato;
     
     public void LoadTableVec(){
         DefaultTableModel modelo_vec = new DefaultTableModel(new Object[]{"Modelo","Placa","Categoria","Data / Horario"},0){
@@ -64,8 +65,8 @@ public final class Principal extends javax.swing.JFrame {
                 return false;
             }
         };
-        for(int i=0;i<ListaVagas.size();i++){
-            Object linha[] = new Object[]{ListaRegistro.get(i).getPreco(),
+        for(int i=0;i<ListaRegistro.size();i++){
+            Object linha[] = new Object[]{("R$"+ListaRegistro.get(i).getPreco()),
                                           ListaRegistro.get(i).getStringHorario(),
                                           };
             modelo_reg.addRow(linha);
@@ -79,6 +80,7 @@ public final class Principal extends javax.swing.JFrame {
         ListaVec = new ArrayList();
         ListaVagas = new ArrayList();
         ListaRegistro = new ArrayList();
+        formato = new DecimalFormat("#.##");
         modoVec="Inicio";
         modoVagas="Inicio";
         rb_vec_carro.setSelected(true);
@@ -465,7 +467,7 @@ public final class Principal extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Float.class, java.lang.Object.class
+                java.lang.String.class, java.lang.Object.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -599,8 +601,7 @@ public final class Principal extends javax.swing.JFrame {
                break;
            }
         }
-        float preco = calcularValor(index);
-        DecimalFormat formato = new DecimalFormat("#.##"); 
+        float preco = calcularValor(index); 
         JOptionPane.showMessageDialog(null,"O dono deste veiculo pargará: R$"+formato.format(preco));
         Date dt = new Date();
         Registro rg = new Registro(preco,dt);
