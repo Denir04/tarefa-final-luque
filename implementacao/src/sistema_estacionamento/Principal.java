@@ -740,8 +740,8 @@ public final class Principal extends javax.swing.JFrame {
                 btn_vec_liberar.setEnabled(false);
                 c_txt_modelo.setEnabled(true);
                 c_txt_placa.setEnabled(true);
-                rb_vec_carro.setEnabled(true);
-                rb_vec_moto.setEnabled(true);
+                rb_vec_carro.setEnabled(false);
+                rb_vec_moto.setEnabled(false);
             }
             case "Selecao"->{
                 btn_vec_salvar.setEnabled(false);
@@ -802,15 +802,8 @@ public final class Principal extends javax.swing.JFrame {
             }
         }
     }
-    /**
-     * @param args the command line arguments
-     */
+   
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Windows".equals(info.getName())) {
@@ -827,9 +820,7 @@ public final class Principal extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
